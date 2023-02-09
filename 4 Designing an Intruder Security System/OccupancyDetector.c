@@ -22,10 +22,6 @@ int main() {
     P4OUT |= BIT1;              // While configured as an input, P4OUT controls whether
                                 // the resistor is a pull up or pull down
 
-    P2DIR &= ~BIT3;             // Configure Pin 2.3 to an input
-    P2REN |= BIT3;              // Enable the pull up/down resistor for Pin 2.3
-    P2OUT |= BIT3;              // While configured as an input, P4OUT controls whether
-                                // the resistor is a pull up or pull down
 
     PM5CTL0 &= ~LOCKLPM5;       // Disable the GPIO power-on default high-impedance mode
                                 // to activate previously configured port settings
@@ -37,42 +33,51 @@ int main() {
     while(1)
     {
       switch (state) {
-        case ARMED_STATE:    //(~P4IN & BIT1) == if P4.1 is pressed
-       {
+        case ARMED_STATE:
            // Do something in the ARMED state
            // If something happens, you can move into the WARNING_STATE
            // state = WARNING_STATE
-           if (~P2IN & BIT3)
-               state == WARNING_STATE;
+           if (!(P4IN & BIT1)) {
+               state = WARNING_STATE;
+               break;
+           }
            else {
             P1OUT &= BIT0 == 0;              // Toggle off P1.0
-            P6OUT &= BIT6 == 1;              // Toggle on P6.6
-            __delay_cycles(500000);          // Delay for 100000*(1/MCLK)= 0.5s
-            P6OUT &= BIT6 == 0;              // Toggle off P6.6
+            P6OUT ^= BIT6;                   // Blink P6.6
             __delay_cycles(3000000);         // Delay for 100000*(1/MCLK)= 3s
            }
-        }
+
         case WARNING_STATE:
-        {
             // Do something in the WARNING_STATE
-            if (~P2IN & BIT3 && )
-                state == ALERT_STATE;
-            else if (~P2IN & BIT3 && ) {
-            P6OUT &= BIT6 == 0;              // Toggle off P6.6
-            P1OUT ^= BIT0;                   // Blink P1.0
-            __delay_cycles(500000);          // Delay for 100000*(1/MCLK)= 0.5s
+            for (int x = 0; x >= 9; x++) {
+                if (!(P4IN & BIT1)) {
+                    state = ARMED_STATE;
+                    break;
+                }
+                else if (x = 10) {
+                    state == ALERT_STATE;
+                    break;
+                }
+                else {
+                    P6OUT &= BIT6 == 0;              // Toggle off P6.6
+                    P1OUT &= BIT0 == 1;              // Toggle off P1.0
+                    __delay_cycles(500000);          // Delay for 100000*(1/MCLK)= 0.5s
+                    P1OUT &= BIT0 == 0;              // Toggle off P1.0
+                    __delay_cycles(500000);          // Delay for 100000*(1/MCLK)= 0.5s
+                }
+                __delay_cycles(1000000);         // Delay for 100000*(1/MCLK)= 1s
             }
-        }
         case ALERT_STATE:
-        {
             // Do something in the ALERT_STATE
-            if (~P4IN & BIT1)
-                state == ARMED_STATE;
+            if (!(P4IN & BIT1)) {
+                state = ARMED_STATE;
+                break;
+            }
             else
                 P1OUT &= BIT0 == 1;              // Toggle on P6.6
-        }
-        }
-      }
-    }
+        default:
+            break;
+       }
+     }
 }
 
