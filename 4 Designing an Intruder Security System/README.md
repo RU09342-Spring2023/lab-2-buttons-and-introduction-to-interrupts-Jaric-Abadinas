@@ -51,3 +51,19 @@ while(1)
 
 ## Submission
 There is a sample file in this folder you will need to import into your Code Composer and work on. You will need to submit that file, documented well, and a README.md file (you can replace this one) with the documentation that tells someone about what the code is, what it does, how it works etc. For an audience for your README, imagine you at the beginning of the lab, looking for code which does, well, this. 
+
+## Start of README:
+File codename: OccupancyDetector.c
+Author: Jaric Abadinas
+
+Main Function of Code:
+- The system when turned on needs to blink the Green LED once every 3 seconds to show it is armed.
+- When the occupancy sensor (P2.3 button) detects someone, it will output a Logic 1, and system moves into a "Warning" state, the Green LED stops blinking, and the Red LED Blinks once per second (500ms on, 500ms off).
+- If the occupancy detector still shows someone there (P2.3 button being held down) after 10 seconds, system indicates this with the RED Led constantly staying on, and move into the ALERT state.
+- If the occupancy detector is released **before**, the 10 seconds goes back to a 0, indicating the room is now empty, then the system goes back to the armed state.
+- When in the ALERT State, the only way for the system to go back to the Armed state is to press the P4.1 Button.
+
+Other functions:
+delay(): function that converts 1000000 microseconds to 1000 milliseconds
+blinkGreenLED(): function that blinks green LED once every 3s
+blinkRedLED(): function that blinks the red LED every second
