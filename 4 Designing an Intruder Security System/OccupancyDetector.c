@@ -42,7 +42,7 @@ int main() {
                                           // to activate previously configured port settings
 
     // Prototypes:
-    void delay(int s);
+    void delay(int ms);
     void blinkGreenLED();
     void blinkRedLED();
 
@@ -93,7 +93,7 @@ int main() {
 void delay(int ms) {                      // Function to convert microseconds to milliseconds
     int i;
     for (i = 0; i < ms; i++) {
-        __delay_cycles(1000);             // Delay for 1000000us = 1s
+        __delay_cycles(1000);             // Delay for 1000000us = 1000ms
     }
 }
 
